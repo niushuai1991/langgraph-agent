@@ -17,6 +17,6 @@ uv run langgraph dev --no-browser
 
 需要在前端项目里修改配置NEXT_PUBLIC_ASSISTANT_ID=data_agent，与langgraph.json的“graphs”里保持一致。
 
-
+## 参考资料
 
 基于[深入浅出LangGraph AI Agent智能体开发教程（五）—LangGraph 数据分析助手智能体项目实战 - 知乎](https://zhuanlan.zhihu.com/p/1951262997294065133)复刻的一个agent。
