@@ -45,20 +45,15 @@ def sql_inter(sql_query: str) -> str:
 
     # 加载环境变量
     load_dotenv(override=True)
-    host = os.getenv('HOST')
-    user = os.getenv('USER')
-    mysql_pw = os.getenv('MYSQL_PW')
-    db = os.getenv('DB_NAME')
-    port = os.getenv('PORT')
+    host = os.getenv("HOST")
+    user = os.getenv("USER")
+    mysql_pw = os.getenv("MYSQL_PW")
+    db = os.getenv("DB_NAME")
+    port = os.getenv("PORT")
 
     # 创建连接
     connection = pymysql.connect(
-        host=host,
-        user=user,
-        passwd=mysql_pw,
-        db=db,
-        port=int(port),
-        charset='utf8'
+        host=host, user=user, passwd=mysql_pw, db=db, port=int(port), charset="utf8"
     )
 
     try:
@@ -72,11 +67,14 @@ def sql_inter(sql_query: str) -> str:
     # 将结果以 JSON 字符串形式返回
     return json.dumps(results, ensure_ascii=False)
 
+
 # 创建数据提取工具
 # 定义结构化参数
 class ExtractQuerySchema(BaseModel):
     sql_query: str = Field(description="用于从 MySQL 提取数据的 SQL 查询语句。")
-    df_name: str = Field(description="指定用于保存结果的 pandas 变量名称（字符串形式）。")
+    df_name: str = Field(
+        description="指定用于保存结果的 pandas 变量名称（字符串形式）。"
+    )
 
 
 # 注册为 Agent 工具
@@ -93,20 +91,15 @@ def extract_data(sql_query: str, df_name: str) -> str:
     print("正在调用 extract_data 工具运行 SQL 查询...")
 
     load_dotenv(override=True)
-    host = os.getenv('HOST')
-    user = os.getenv('USER')
-    mysql_pw = os.getenv('MYSQL_PW')
-    db = os.getenv('DB_NAME')
-    port = os.getenv('PORT')
+    host = os.getenv("HOST")
+    user = os.getenv("USER")
+    mysql_pw = os.getenv("MYSQL_PW")
+    db = os.getenv("DB_NAME")
+    port = os.getenv("PORT")
 
     # 创建数据库连接
     connection = pymysql.connect(
-        host=host,
-        user=user,
-        passwd=mysql_pw,
-        db=db,
-        port=int(port),
-        charset='utf8'
+        host=host, user=user, passwd=mysql_pw, db=db, port=int(port), charset="utf8"
     )
 
     try:
@@ -124,7 +117,9 @@ def extract_data(sql_query: str, df_name: str) -> str:
 # 创建Python代码执行工具
 # Python代码执行工具结构化参数说明
 class PythonCodeInput(BaseModel):
-    py_code: str = Field(description="一段合法的 Python 代码字符串，例如 '2 + 2' 或 'x = 3\ny = x * 2'")
+    py_code: str = Field(
+        description="一段合法的 Python 代码字符串，例如 '2 + 2' 或 'x = 3\ny = x * 2'"
+    )
 
 
 @tool(args_schema=PythonCodeInput)
@@ -159,8 +154,12 @@ def python_inter(py_code):
 # 创建绘图工具
 # 绘图工具结构化参数说明
 class FigCodeInput(BaseModel):
-    py_code: str = Field(description="要执行的 Python 绘图代码，必须使用 matplotlib/seaborn 创建图像并赋值给变量")
-    fname: str = Field(description="图像对象的变量名，例如 'fig'，用于从代码中提取并保存为图片")
+    py_code: str = Field(
+        description="要执行的 Python 绘图代码，必须使用 matplotlib/seaborn 创建图像并赋值给变量"
+    )
+    fname: str = Field(
+        description="图像对象的变量名，例如 'fig'，用于从代码中提取并保存为图片"
+    )
 
 
 @tool(args_schema=FigCodeInput)
@@ -183,7 +182,7 @@ def fig_inter(py_code: str, fname: str) -> str:
     # print("正在调用fig_inter工具运行Python代码...")
 
     current_backend = matplotlib.get_backend()
-    matplotlib.use('Agg')
+    matplotlib.use("Agg")
 
     local_vars = {"plt": plt, "pd": pd, "sns": sns}
 
@@ -201,16 +200,18 @@ def fig_inter(py_code: str, fname: str) -> str:
         if fig:
             image_filename = f"{fname}.png"
             abs_path = os.path.join(images_dir, image_filename)  # 绝对路径
-            rel_path = os.path.join("images", image_filename)  # 返回相对路径（给前端用）
+            rel_path = os.path.join(
+                "images", image_filename
+            )  # 返回相对路径（给前端用）
 
-            fig.savefig(abs_path, bbox_inches='tight')
+            fig.savefig(abs_path, bbox_inches="tight")
             return f"图片已保存，路径为: {rel_path}"
         else:
             return "图像对象未找到，请确认变量名正确并为 matplotlib 图对象。"
     except Exception as e:
         return f"执行失败：{e}"
     finally:
-        plt.close('all')
+        plt.close("all")
         matplotlib.use(current_backend)
 
 
@@ -259,8 +260,8 @@ system_prompt = """
 tools = [python_inter, fig_inter, sql_inter, extract_data]
 
 # 创建模型
-model = ChatOpenAI(model="qwen-max")
+model_name = os.getenv("MODEL_NAME")
+model = ChatOpenAI(model=model_name)
 
 # 创建图 （Agent）
 graph = create_agent(model=model, tools=tools, system_prompt=system_prompt)
-
