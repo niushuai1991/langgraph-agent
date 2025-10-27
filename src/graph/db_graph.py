@@ -13,7 +13,7 @@ import pandas as pd
 import pymysql
 
 # 加载环境变量
-load_dotenv(override=True)
+load_dotenv(override=True, encoding='utf-8')
 
 
 # 创建SQL查询工具
@@ -44,7 +44,7 @@ def sql_inter(sql_query: str) -> str:
     # print("正在调用 sql_inter 工具运行 SQL 查询...")
 
     # 加载环境变量
-    load_dotenv(override=True)
+    load_dotenv(override=True, encoding='utf-8')
     host = os.getenv("HOST")
     user = os.getenv("USER")
     mysql_pw = os.getenv("MYSQL_PW")
@@ -90,7 +90,7 @@ def extract_data(sql_query: str, df_name: str) -> str:
     """
     print("正在调用 extract_data 工具运行 SQL 查询...")
 
-    load_dotenv(override=True)
+    load_dotenv(override=True, encoding='utf-8')
     host = os.getenv("HOST")
     user = os.getenv("USER")
     mysql_pw = os.getenv("MYSQL_PW")
