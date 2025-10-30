@@ -13,6 +13,14 @@ uv sync
 uv run langgraph dev --no-browser
 ```
 
+
+代码检查
+```
+uv run black .
+uv run pytest
+uv run ruff check --fix
+```
+
 ## 对接agent-chat-ui
 
 需要在前端项目里修改配置NEXT_PUBLIC_ASSISTANT_ID=data_agent，与langgraph.json的“graphs”里保持一致。
