@@ -7,6 +7,7 @@ This is the LangGraph project; the command to start the project is `uv run langg
 ### Unit Testing
 - This project uses the pytest framework for writing unit tests. All tests are unified in the tests directory. The path of unit test scripts should match the path of the scripts being tested. For example, the test script for src/cache/picture.py should be located at tests/cache/test_picture.py.
 - To run a single unit test file, use the command `uv run python -m pytest <path_to_test_file>` to avoid Python module import path issues. For example, to run the tests/cache/test_picture.py script, the command would be `uv run python -m pytest tests/cache/test_picture.py`.
+- To run a complete unit test, use the command `uv run python -m pytest.`.
 
 ### Core Principles
 - **Security is Paramount:**
