@@ -1,12 +1,11 @@
-
-import base64
 import os
-from dotenv import load_dotenv
+from uuid import uuid4
 from langchain.agents import create_agent
 
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
+from src.cache import picture
 
 system_prompt = """
 ## Flashcard Generator
@@ -187,14 +186,16 @@ system_prompt = """
  6. Ignore the audio section
 """
 
+
 # 生成一个随机单词的信息
 @tool()
 def random_english_words() -> str:
     """
     生成一个随机单词的信息
     """
-    url = 'https://v2.xxapi.cn/api/randomenglishwords'
+    url = "https://v2.xxapi.cn/api/randomenglishwords"
     import requests
+
     response = requests.get(url)
     if response.status_code == 200:
         return response.text
@@ -212,19 +213,19 @@ def english_words(word: str) -> str:
     """
     免费API提供详细的英语单词信息查询功能，返回单词的短语、同根词、翻译、音标、近义词和例句，适用于学习、词汇查询和语言应用开发。
     """
-    url = 'https://v2.xxapi.cn/api/englishwords'
+    url = "https://v2.xxapi.cn/api/englishwords"
     import requests
+
     response = requests.get(url, params={"word": word})
     if response.status_code == 200:
         return response.text
     else:
         return "Error: Unable to fetch word information."
 
-from uuid import uuid4
-from src.cache import picture
 
 class SvgUrlParam(BaseModel):
     svg: str = Field(description="svg图片内容")
+
 
 @tool(args_schema=SvgUrlParam)
 def svg_url(svg: str) -> str:
@@ -238,7 +239,6 @@ def svg_url(svg: str) -> str:
     # 生成url
     url = f"http://localhost:2024/picture?id={id}"
     return url
-
 
 
 # 创建工具列表

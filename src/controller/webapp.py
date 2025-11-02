@@ -1,4 +1,3 @@
-
 # ./src/agent/webapp.py
 from uuid import UUID
 from fastapi import FastAPI, Request
@@ -13,7 +12,8 @@ app = FastAPI()
 def read_root(request: Request) -> JSONResponse:
     return JSONResponse(content={"Hello": "World"})
 
-@app.get('/picture')
+
+@app.get("/picture")
 def get_picture(id: UUID) -> Response:
     # 从缓存中获取图片
     svg = picture.get(id)

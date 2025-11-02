@@ -1,6 +1,4 @@
-
 from uuid import UUID
-from functools import lru_cache
 
 # Although lru_cache is a decorator, we can use a dictionary-based
 # approach to simulate the put/get behavior the user requested.
@@ -8,6 +6,7 @@ from functools import lru_cache
 
 _cache = {}
 _maxsize = 128
+
 
 def put(key: UUID, value: str):
     """
@@ -20,6 +19,7 @@ def put(key: UUID, value: str):
         except StopIteration:
             pass  # Cache is empty
     _cache[key] = value
+
 
 def get(key: UUID) -> str | None:
     """
