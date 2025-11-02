@@ -21,7 +21,7 @@ system_prompt = """
 **Tool Usage Priority:**
 - If you need to obtain word information, please use the `english_words` tool first.
 - If you need to generate random word information, please use the `random_english_words` tool.
-
+- If you need to return the image to the user, you need to call the `svg_url` tool to get the image address and return it to the user.
 
  ### Input
  The user input is the `result` variable output from the upstream code node, which contains word information in JSON format. The structure is as follows:
@@ -220,22 +220,29 @@ def english_words(word: str) -> str:
     else:
         return "Error: Unable to fetch word information."
 
+from uuid import uuid4
+from src.cache import picture
+
 class SvgUrlParam(BaseModel):
     svg: str = Field(description="svg图片内容")
 
+@tool(args_schema=SvgUrlParam)
 def svg_url(svg: str) -> str:
     """
-    将svg内容转换为data url格式，方便在网页中直接使用
+    将svg内容保存到缓存中，并生成一个url
     """
-    svg_bytes = svg.encode('utf-8')
-    b64_encoded = base64.b64encode(svg_bytes).decode('utf-8')
-    data_url = f"data:image/svg+xml;base64,{b64_encoded}"
-    return data_url
+    # 生成一个唯一的id
+    id = uuid4()
+    # 将svg内容保存到缓存中
+    picture.put(id, svg)
+    # 生成url
+    url = f"http://localhost:2024/picture?id={id}"
+    return url
 
 
 
 # 创建工具列表
-tools = [random_english_words, english_words]
+tools = [random_english_words, english_words, svg_url]
 
 # 创建模型
 model_name = os.getenv("MODEL_NAME")
