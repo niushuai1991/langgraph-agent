@@ -1,7 +1,11 @@
 {
   "dependencies": [" ./"],
   "graphs":{
-    "data_agent": "./src/graph/db_graph.py:graph"
+    "data_agent": "./src/graph/db_graph.py:graph",
+    "word_card_agent": "./src/graph/word_card_graph.py:graph"
   },
-  "env": ".env"
+  "env": ".env",
+  "http": {
+    "app": "./src/controller/webapp.py:app"
+  }
 }

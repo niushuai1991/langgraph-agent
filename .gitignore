@@ -10,6 +10,9 @@ wheels/
 .venv
 
 
+# vscode
+.vscode/
+
 .env
 
 # langgraph
