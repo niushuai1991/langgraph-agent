@@ -4,11 +4,6 @@
 To install dependencies, you need to use the `uv` command. For example, to install the langgraph dependency, execute `uv add langgraph`.
 This is the LangGraph project; the command to start the project is `uv run langgraph dev --no-browser`.
 
-### Unit Testing
-- This project uses the pytest framework for writing unit tests. All tests are unified in the tests directory. The path of unit test scripts should match the path of the scripts being tested. For example, the test script for src/cache/picture.py should be located at tests/cache/test_picture.py.
-- To run a single unit test file, use the command `uv run python -m pytest <path_to_test_file>` to avoid Python module import path issues. For example, to run the tests/cache/test_picture.py script, the command would be `uv run python -m pytest tests/cache/test_picture.py`.
-- To run a complete unit test, use the command `uv run python -m pytest.`.
-
 ### Core Principles
 - **Security is Paramount:**
     *   **Never expose secrets.** Do not output the contents of .env anywhere.
@@ -16,7 +11,7 @@ This is the LangGraph project; the command to start the project is `uv run langg
 ### Code inspection
 - Code formmating. Use `uv run black .` for code formatting.
 - Unit test. Use `uv run pytest .` to perform a complete unit test.
-- Static code analyzer. Use `uv run ruff check --fix .` to check and fix any fixable code modifications, and then use `uv run ruff check .` again to check if there is any code that needs to be manually fixed.
+- Static code analyzer. Use `uv run ruff check --fix .` to check and fix any fixable code changes. If it cannot fix all issues, use `uv run ruff check .` again to check for any code that needs to be manually fixed.
 
 
 ### Your Role in Development
